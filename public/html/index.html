@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>front-nodejs-api</title>
+    <style>
+      #main {
+        border: solid 2px black;
+        padding: 10px;
+      }
+      #form {
+        margin-bottom: 10px;
+      }
+      #button {
+        border: solid 1px black;
+        padding: 5px;
+        background-color: white;
+        color: black;
+      }
+      #button:hover {
+        border: solid 1px black;
+        padding: 5px;
+        background-color: black;
+        color: white;
+      }
+      table,
+      td {
+          border: 1px solid #333;
+          padding: 2px;
+      }
+    </style>
+  </head>
+  <body onload="getTasks()">
+    <noscript>
+      <strong>We're sorry but front-nodejs-api doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app">
+      <h1>Task manager</h1>
+      <div id="main">
+        <div id="form">
+          <label for="name">Libellé :</label>
+          <input type="text" id="name" name="name" required size="10">
+
+          <label for="status">Statut :</label>
+          <select name="status" id="status">
+              <option value="pending">A faire</option>
+              <option value="ongoing">En cours</option>
+              <option value="completed">Terminée</option>
+          </select>
+
+          <button id="button">Envoyer</button>
+        </div>
+        <p>Liste :</p>
+        <table id="list">
+          <thead>
+            <tr>
+              <th scope="col">Libellé</th>
+              <th scope="col">Statut</th>
+              <th scope="col">&emsp;</th>
+            </tr>
+          </thead>
+          <tbody id="tablelist">
+            <tr>
+              <td>TRAVAILLER</td>
+              <td>En cours</td>
+              <td>&emsp;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <script>
+      function getTasks() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4) {
+            console.log(JSON.parse(xhr.response));
+            resObject = JSON.parse(xhr.response); // Par défault une DOMString
+            resObject.forEach(function(task){
+              addATask(task);
+            });
+          }
+        }
+        xhr.open('GET', '/data/getTasks', true);
+        xhr.send('');
+      }
+
+      function addATask(task) {
+        console.log(task);
+        var parsedTask = task;
+        console.log(parsedTask);
+        var tchat = document.getElementById("tablelist");
+        tchat.insertAdjacentHTML("beforeend", "<tr><td>" + parsedTask.name + "</td><td>" + parsedTask.status + "</td><td><button>X</button></td></tr>");
+      }
+    </script>
+  </body>
+</html>
